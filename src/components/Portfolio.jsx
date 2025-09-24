@@ -57,10 +57,10 @@ export default function Portfolio() {
             Contact
           </a>
           <div className="hidden sm:flex items-center gap-3 ml-4">
-            <a href="#" aria-label="GitHub" className="p-2 rounded hover:bg-white/5">
+            <a href="https://github.com/Manojkumar128" aria-label="GitHub" className="p-2 rounded hover:bg-white/5">
               <FaGithub />
             </a>
-            <a href="#" aria-label="LinkedIn" className="p-2 rounded hover:bg-white/5">
+            <a href="https://www.linkedin.com/in/manojkumar-ainala-85a882326?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" aria-label="LinkedIn" className="p-2 rounded hover:bg-white/5">
               <FaLinkedin />
             </a>
           </div>
