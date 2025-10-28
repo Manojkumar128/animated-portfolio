@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
+import emailjs from "emailjs-com";
 
 // Projects list
 const projects = [
@@ -27,6 +28,39 @@ const projects = [
 const ease = [0.6, -0.05, 0.01, 0.99];
 
 export default function Portfolio() {
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [status, setStatus] = useState("");
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setStatus("Sending...");
+
+    emailjs
+      .send(
+        "service_ycedb5r", // your EmailJS Service ID
+        "template_cpsudg5", // your Template ID
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          message: formData.message,
+        },
+        "lb0s2Ts_fE_gF65UX" // your Public Key
+      )
+      .then(
+        () => {
+          setStatus("✅ Message sent successfully!");
+          setFormData({ name: "", email: "", message: "" });
+        },
+        () => {
+          setStatus("❌ Failed to send message. Please try again.");
+        }
+      );
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-black text-white">
       {/* NAV */}
@@ -47,20 +81,18 @@ export default function Portfolio() {
         </div>
 
         <div className="flex items-center gap-4">
-          <a href="#projects" className="text-sm hover:text-indigo-400 transition">
-            Projects
-          </a>
-          <a href="#about" className="text-sm hover:text-indigo-400 transition">
-            About
-          </a>
-          <a href="#contact" className="text-sm hover:text-indigo-400 transition">
-            Contact
-          </a>
+          <a href="#projects" className="text-sm hover:text-indigo-400 transition">Projects</a>
+          <a href="#about" className="text-sm hover:text-indigo-400 transition">About</a>
+          <a href="#contact" className="text-sm hover:text-indigo-400 transition">Contact</a>
           <div className="hidden sm:flex items-center gap-3 ml-4">
             <a href="https://github.com/Manojkumar128" aria-label="GitHub" className="p-2 rounded hover:bg-white/5">
               <FaGithub />
             </a>
-            <a href="https://www.linkedin.com/in/manojkumar-ainala-85a882326?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" aria-label="LinkedIn" className="p-2 rounded hover:bg-white/5">
+            <a
+              href="https://www.linkedin.com/in/manojkumar-ainala-85a882326"
+              aria-label="LinkedIn"
+              className="p-2 rounded hover:bg-white/5"
+            >
               <FaLinkedin />
             </a>
           </div>
@@ -94,7 +126,6 @@ export default function Portfolio() {
             >
               View projects
             </motion.a>
-
             <motion.a
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.98 }}
@@ -108,39 +139,6 @@ export default function Portfolio() {
           <div className="mt-8 flex items-center gap-4 text-gray-300">
             <FaEnvelope />
             <span className="text-sm">manojkumarainala152@gmail.com</span>
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ scale: 0.95, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.8, ease }}
-          className="flex-1"
-        >
-          <div className="relative mx-auto w-80 h-80">
-            <motion.div
-              animate={{ rotate: [0, 2, -2, 0] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-              className="absolute inset-0 rounded-2xl bg-gradient-to-tr from-indigo-600 to-pink-500 shadow-2xl transform-gpu"
-            />
-            <motion.div
-              initial={{ y: 40, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.2, duration: 0.6, ease }}
-              className="absolute inset-4 bg-gray-900 rounded-xl p-6 shadow-xl border border-white/6"
-            >
-              <div className="h-full flex flex-col justify-between">
-                <div>
-                  <div className="text-sm text-gray-300">Featured</div>
-                  <h3 className="mt-3 text-xl font-semibold">Interactive dashboard</h3>
-                  <p className="mt-2 text-sm text-gray-400">A data visualization dashboard with real-time updates.</p>
-                </div>
-                <div className="mt-6 flex items-center justify-between">
-                  <div className="text-xs text-gray-400">React • D3 • Socket</div>
-                  <a href="#projects" className="text-sm font-medium hover:text-indigo-400">See project →</a>
-                </div>
-              </div>
-            </motion.div>
           </div>
         </motion.div>
       </section>
@@ -167,22 +165,15 @@ export default function Portfolio() {
               transition={{ delay: i * 0.12, duration: 0.5, ease }}
               className="rounded-xl bg-white/3 p-6 backdrop-blur border border-white/6"
             >
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h3 className="text-lg font-semibold">{p.title}</h3>
-                  <p className="mt-2 text-sm text-gray-300">{p.description}</p>
-                </div>
-                <div className="text-xs text-gray-400 flex gap-2">
-                  {p.tags.map((t) => (
-                    <span key={t} className="px-2 py-1 rounded bg-white/5">{t}</span>
-                  ))}
-                </div>
+              <h3 className="text-lg font-semibold">{p.title}</h3>
+              <p className="mt-2 text-sm text-gray-300">{p.description}</p>
+              <div className="mt-3 flex flex-wrap gap-2 text-xs text-gray-400">
+                {p.tags.map((t) => (
+                  <span key={t} className="px-2 py-1 rounded bg-white/5">{t}</span>
+                ))}
               </div>
               <div className="mt-4 flex items-center justify-between">
                 <a href={p.link} className="text-sm font-medium hover:text-indigo-400">Explore →</a>
-                <motion.button whileHover={{ scale: 1.03 }} className="text-xs px-3 py-1 rounded bg-white/5">
-                  Live
-                </motion.button>
               </div>
             </motion.article>
           ))}
@@ -201,9 +192,9 @@ export default function Portfolio() {
           <div className="lg:col-span-2">
             <h2 className="text-2xl font-bold">About me</h2>
             <p className="mt-4 text-gray-300 max-w-2xl">
-              I'm a frontend developer who loves turning ideas into user-friendly products. I enjoy
-              micro-interactions, good performance budgets, and readable code. I’m available for
-              freelance and full-time roles.
+              I'm a frontend developer who loves turning ideas into user-friendly products.
+              I enjoy micro-interactions, good performance budgets, and readable code.
+              I’m available for freelance and full-time roles.
             </p>
 
             <ul className="mt-6 grid grid-cols-2 gap-4 text-sm text-gray-300">
@@ -212,15 +203,6 @@ export default function Portfolio() {
               <li>Tailwind CSS</li>
               <li>Accessibility & UX</li>
             </ul>
-          </div>
-
-          <div className="rounded-xl p-6 bg-white/3 border border-white/6">
-            <div className="text-sm text-gray-300">Contact</div>
-            <div className="mt-4 text-sm">Manoj Kumar</div>
-            <div className="text-sm text-gray-300">Location: India</div>
-            <div className="mt-4">
-              <a href="#contact" className="text-sm font-medium hover:text-indigo-400">Send a message →</a>
-            </div>
           </div>
         </motion.div>
       </section>
@@ -237,14 +219,41 @@ export default function Portfolio() {
           <h2 className="text-2xl font-bold">Get in touch</h2>
           <p className="mt-2 text-gray-300">I’m open to new opportunities — message me and I’ll get back soon.</p>
 
-          <form className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <input className="p-3 rounded bg-white/5 border border-white/6" placeholder="Your name" />
-            <input className="p-3 rounded bg-white/5 border border-white/6" placeholder="Email" />
-            <textarea className="md:col-span-2 p-3 rounded bg-white/5 border border-white/6" placeholder="Message" rows={5} />
+          <form onSubmit={handleSubmit} className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className="p-3 rounded bg-white/5 border border-white/6"
+              placeholder="Your name"
+              required
+            />
+            <input
+              name="email"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+              className="p-3 rounded bg-white/5 border border-white/6"
+              placeholder="Email"
+              required
+            />
+            <textarea
+              name="message"
+              value={formData.message}
+              onChange={handleChange}
+              className="md:col-span-2 p-3 rounded bg-white/5 border border-white/6"
+              placeholder="Message"
+              rows={5}
+              required
+            />
             <div className="md:col-span-2 flex justify-end">
-              <button className="px-6 py-3 rounded bg-indigo-500 font-semibold">Send</button>
+              <button type="submit" className="px-6 py-3 rounded bg-indigo-500 font-semibold">
+                Send
+              </button>
             </div>
           </form>
+
+          {status && <p className="mt-4 text-gray-200">{status}</p>}
         </motion.div>
       </section>
 
